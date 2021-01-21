@@ -10,10 +10,31 @@ export const resolvers = {
       const dbWord = new Word(wordObj)
       return dbWord.save()
     },
+
+
     deleteWord: async (_, { id }) => {
-      return await Word.findOneAndDelete({
+      const deletedWord = await Word.findOne({
         _id: new ObjectID(id),
       })
+      await Word.deleteOne({
+        _id: new ObjectID(id),
+      })
+
+      return deletedWord
+    },
+
+    
+    updateWord: async (_, { id, wordObj }) => {
+      await Word.updateOne(
+        { _id: new ObjectID(id) },
+        { $set: wordObj }
+      )
+
+      const updatedWord = await Word.findOne({
+        _id: new ObjectID(id),
+      })
+
+      return updatedWord
     },
   },
 }

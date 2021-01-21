@@ -25,5 +25,9 @@ export const typeDefs = gql`
   type Mutation {
     createWord(wordObj: WordInput!): Word!
     deleteWord(id: ID!): Word!
+    updateWord(
+      id: ID!,
+      wordObj: WordInput!
+    ): Word!
   }
 `
