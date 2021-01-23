@@ -3,6 +3,7 @@ import { gql } from "apollo-server-express"
 export const typeDefs = gql`
   type Query {
     getAllWords: [Word!]!
+    getWordById(id: ID!): Word!
   }
 
   type Word {
@@ -26,7 +27,7 @@ export const typeDefs = gql`
     createWord(wordObj: WordInput!): Word!
     deleteWord(id: ID!): Word!
     updateWord(
-      id: ID!,
+      id: ID!
       wordObj: WordInput!
     ): Word!
   }
