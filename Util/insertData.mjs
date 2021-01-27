@@ -1,5 +1,5 @@
 import axios from "axios"
-import { Spanish } from "./es.mjs"
+import { Spanish } from "./Util/es.mjs"
 
 const translationObject = JSON.parse(Spanish)
 const createWordPostRequest = (word, translation) =>

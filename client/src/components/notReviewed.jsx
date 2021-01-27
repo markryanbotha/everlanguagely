@@ -1,6 +1,6 @@
 import { gql, useQuery } from "@apollo/client"
 import { Link } from "react-router-dom"
-import { React, useState } from "react"
+import { React, useState, useMemo, useCallback } from "react"
 
 const GET_ALL_WORDS = gql`
   query {
@@ -21,15 +21,6 @@ export default function NotReviewed() {
   const [myQuery, setMyQuery] = useState("")
   const [isTranslated, setIsTranslated] = useState({})
 
-  if (loading) {
-    return (
-      <div className="spinner-grow dark" role="status">
-        <span className="sr-only">Loading...</span>
-      </div>
-    )
-  }
-  if (error) return <p>Error 😭</p>
-
   const wordsAfterSearch = data.getAllWords.filter(
     (obj) =>
       obj["word"].toLowerCase().includes(myQuery.toLowerCase()) ||
@@ -41,37 +32,56 @@ export default function NotReviewed() {
     setMyQuery(search)
   }
 
-  const handleCardClick = (e, id) => {
-    e.preventDefault()
-    if (isTranslated[id] === true) {
-      setIsTranslated({ ...isTranslated, [id]: false })
-    } else {
-      setIsTranslated({ ...isTranslated, [id]: true })
-    }
-  }
+  const handleCardClick = useCallback(
+    (e, id) => {
+      e.preventDefault()
+      if (isTranslated[id] === true) {
+        setIsTranslated({ ...isTranslated, [id]: false })
+      } else {
+        setIsTranslated({ ...isTranslated, [id]: true })
+      }
+    },
+    [isTranslated]
+  )
 
+  const translationStyle = useCallback(
+    (id) => ({
+      color: "#677ea3",
+      visibility: isTranslated[id] === true ? "visible" : "collapse",
+    }),
+    [isTranslated]
+  )
 
-  const translationStyle = (id) => ({
-    color: "#677ea3",
-    visibility: isTranslated[id] === true ? "visible" : "collapse",
-  })
-
-  //filter before passing to map
-  const myData = wordsAfterSearch.map(({ id, word, translation }) => (
-    <div className="card card-body mb-3">
-      <div className="row">
-        <div className="col-md-9" onClick={(e) => handleCardClick(e, id)}>
-          <h1>{word}</h1>
-          <h1 style={translationStyle(id)}> {translation}</h1>
+  const myData = useMemo(
+    () =>
+      wordsAfterSearch.map(({ id, word, translation }) => (
+        <div className="card card-body mb-3" key={id}>
+          <div className="row">
+            <div className="col-md-9" onClick={(e) => handleCardClick(e, id)}>
+              <h1>
+                {word}
+              </h1>
+              <h1 style={translationStyle(id)}> {translation}</h1>
+            </div>
+            <div className="col md-3">
+              <Link to={`/word/${id}`} className="btn btn-secondary float-right">
+                Details
+              </Link>
+            </div>
+          </div>
         </div>
-        <div className="col md-3">
-          <Link to={`/word/${id}`} className="btn btn-secondary float-right">
-            Details
-          </Link>
-        </div>
+      )),
+    [handleCardClick, translationStyle, wordsAfterSearch]
+  )
+
+  if (loading) {
+    return (
+      <div className="spinner-grow dark" role="status">
+        <span className="sr-only">Loading...</span>
       </div>
-    </div>
-  ))
+    )
+  }
+  if (error) return <p>Error 😭</p>
 
   return (
     <div>
