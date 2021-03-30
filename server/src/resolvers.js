@@ -39,5 +39,18 @@ export const resolvers = {
 
       return updatedWord
     },
+
+    updateWord: async (_, { id, wordObj }) => {
+      await Word.updateOne(
+        { _id: new ObjectID(id) },
+        { $set: wordObj }
+      )
+
+      const updatedWord = await Word.findOne({
+        _id: new ObjectID(id),
+      })
+
+      return updatedWord
+    },
   },
 }

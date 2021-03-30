@@ -1,2 +1,7 @@
 node_modules
 credentials.js
+.DS_Store
+# Remove Later
+Util/AudioSubtitles
+.env
+*.zip

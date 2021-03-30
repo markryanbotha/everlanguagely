@@ -3,7 +3,7 @@ import mongooose from "mongoose"
 import { ApolloServer } from "apollo-server-express"
 import { typeDefs } from "./typeDefs"
 import { resolvers } from "./resolvers"
-import { dbURL } from "./credentials"
+require("dotenv").config()
 
 const startServer = async () => {
   const app = express()
@@ -12,7 +12,7 @@ const startServer = async () => {
     resolvers,
   })
 
-  await mongooose.connect(dbURL, {
+  await mongooose.connect(process.env.DB_URL, {
     useUnifiedTopology: true,
     useNewUrlParser: true,
   })

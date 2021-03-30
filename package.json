@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "insertData": "nodemon --exec babel-node insertData.mjs ",
+    "subtitle": "babel-node Util/AudioSubtitles/index.mjs ",
     "start": "nodemon --exec babel-node ./server/src/index.js",
     "client": "npm start --prefix client",
     "dev": "concurrently \"npm run start\" \"npm run client\""

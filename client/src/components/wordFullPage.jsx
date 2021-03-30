@@ -23,8 +23,6 @@ export default function WordFullPage(props) {
   const { loading, error, data } = useQuery(GET_WORD_BY_ID, { variables: { id } })
   if (loading) return <p>Loading...</p>
   if (error) return <p>Error😢</p>
-  console.log(id)
-  console.log(data)
 
   let { word, translation, date, currentFibonnaci, nextFibonnaci } = data.getWordById
 
